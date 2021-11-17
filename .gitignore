@@ -1,0 +1,6 @@
+Build/*.exe
+Build/*.ilk
+Compiler/OBJ/*.obj
+Compiler/PCH/*.pch 
+Compiler/PDB/*.idb
+Compiler/PDB/*.pdb

@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "(Program) Execute",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Build/main.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/Build",
+            "externalConsole": true
+        },
+        {
+            "name": "(Program) Compile and Execute",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Build/main.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/Build",
+            "externalConsole": false,
+            "preLaunchTask": "Development Build"
+        },
+    ]
+}
