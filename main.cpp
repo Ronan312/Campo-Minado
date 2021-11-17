@@ -7,13 +7,10 @@ struct PreInitialization { PreInitialization(){ SetDllDirectoryW(L".\\Binaries\\
 
 int main(int argc, char* argv[]){
 
-    std::cout << "Hello World!" << std::endl;
-
     Application app;
+
     app.Initialize();
-
         app.Run();
-
     app.Shutdown();
 
     return 0;

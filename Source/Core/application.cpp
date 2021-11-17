@@ -15,17 +15,26 @@ void Application::Initialize(){
     Mix_Init(MIX_INIT_MP3);
 
     // Create a Application Window
-    this->window = SDL_CreateWindow("Manifesto - Campo Minado", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, NULL);
+    this->window = SDL_CreateWindow("Manifesto - Campo Minado",                         // Game title
+                                    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,     // Centralize Window on middle screen
+                                    1280, 720, NULL);                                   // Screen Size and Extra Flags
 
     // Create a renderer surface
     this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
-
+    
     // Create a SDL Events
     this->events = new SDL_Event;
+
+    // Initialize Game Loop
+    this->isRunning = true;
 
 };
 
 void Application::Shutdown(){
+
+    // Destroy Instances
+    SDL_DestroyRenderer(this->renderer);
+    SDL_DestroyWindow(this->window);
 
     // Shutdown SDL Modules
     SDL_Quit();
@@ -59,4 +68,13 @@ void Application::HandleEvents(){
 
 void Application::Update(){};
 
-void Application::Render(){};
+void Application::Render(){
+
+    SDL_RenderClear(this->renderer);                            // Clear content in render
+    SDL_SetRenderDrawColor(this->renderer, 88, 88, 88, 255);    // Draw a new color inside render
+
+
+
+    SDL_RenderPresent(this->renderer);                          // Show render in screen
+
+};
