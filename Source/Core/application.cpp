@@ -1,7 +1,12 @@
 #include "Core/application.hpp"
+#include <chrono>
+#include <cstdint>
 #include "Vendors/SDL/SDL.h"
 #include "Vendors/SDL/SDL_image.h"
 #include "Vendors/SDL/SDL_mixer.h"
+#include "Core/random.hpp"
+
+std::unordered_map<std::string, SDL_Texture*> Application::resources;
 
 Application::Application(){};
 Application::~Application(){};
@@ -25,8 +30,20 @@ void Application::Initialize(){
     // Create a SDL Events
     this->events = new SDL_Event;
 
+    // Load Assets
+    Application::LoadAssets(this->renderer);
+
     // Initialize Game Loop
     this->isRunning = true;
+
+    // Set Seed for Randomize tiles
+    auto now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    uint_fast32_t seed = static_cast<uint_fast32_t>(now);
+    Random::Seed(seed);
+
+    // Initialize Grid
+    grid = new Grid();
+    grid->InitializeBoard(78, 43, 200);
 
 };
 
@@ -73,8 +90,17 @@ void Application::Render(){
     SDL_RenderClear(this->renderer);                            // Clear content in render
     SDL_SetRenderDrawColor(this->renderer, 88, 88, 88, 255);    // Draw a new color inside render
 
-
+    grid->Render(this->renderer);
 
     SDL_RenderPresent(this->renderer);                          // Show render in screen
+
+};
+
+void Application::LoadAssets(SDL_Renderer* render){
+
+    // Load Game Bricks
+    SDL_Surface* surfBrick = IMG_Load("./Assets/bricks.png");
+    SDL_Texture* textBrick = SDL_CreateTextureFromSurface(render, surfBrick);
+    Application::resources["Bricks"] = textBrick;
 
 };
