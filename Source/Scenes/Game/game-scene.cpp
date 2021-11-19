@@ -36,6 +36,12 @@ void GameScene::Update() {
     this->MouseClick();
     this->MousePutFlag();
 
+    if (grid->CheckAllBombsWasMarkedAsWarning() || grid->CheckAllCellWasRevealed()){
+        mouse->SetLocked(true);
+        std::cout << "Game Win" << std::endl;     
+        sceneManager->ChangeScene(EScene::GameOver);   
+    };
+
 };
 
 void GameScene::Render(SDL_Renderer* render) {
@@ -57,22 +63,37 @@ void GameScene::MouseClick(){
         if ((x < 0 || x >= grid->GetWidth()) || (y < 0 || y >= grid->GetHeight())) return;
 
         Cell* cell = grid->GetCell(x, y);
-        if (!cell->wasClicked) cell->wasClicked = true;
+
+        if (cell->haveWarning) return;
+
+        grid->RevealCell(cell);
+
+        if (cell->flag == ECellFlag::None) grid->RevealBlankCell(x, y);
 
         if (cell->flag == ECellFlag::Bomb){
 
             mouse->SetLocked(true);
             std::cout << "Game Over" << std::endl;
+            sceneManager->ChangeScene(EScene::GameOver);
 
-        }
+        };
 
-        if (cell->flag == ECellFlag::None) grid->RevealBlankCell(x, y);
 
     }
 
 };
 void GameScene::MousePutFlag(){
 
+    if (mouse->pressed[1] && !mouse->IsLocked()){
 
+        SDL_Point* mousePos = mouse->GetMousePosition();
+        int x = mousePos->x / 16;
+        int y = mousePos->y / 16;
+
+        if ((x < 0 || x >= grid->GetWidth()) || (y < 0 || y >= grid->GetHeight())) return;
+
+        grid->PutWarningInCell(x, y);
+
+    }
 
 };

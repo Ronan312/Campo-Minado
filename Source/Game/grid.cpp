@@ -9,6 +9,8 @@ Grid::Grid(uint8_t width, uint8_t height, uint8_t max_bomb){
     this->height = height;
     this->maxBombs = max_bomb;
 
+    cellTotal = (width*height) - max_bomb;
+
 };
 
 void Grid::InitializeBoard(){
@@ -142,6 +144,21 @@ Cell* Grid::GetRandomCell(){
 
 };
 
+void Grid::RevealCell(Cell* cell){
+
+    if (!cell->wasClicked) {
+        
+        cell->wasClicked = true;
+        if (cell->flag != ECellFlag::Bomb) cellRevealed++;
+
+        std::cout << "cellRevealed: "<< cellRevealed << " from cellTotal: " << cellTotal << std::endl;
+
+    }
+    
+
+
+};
+
 void Grid::RevealBlankCell(int x, int y){
 
     // Array from 4 adjacent directions 
@@ -150,8 +167,8 @@ void Grid::RevealBlankCell(int x, int y){
                                 { 0,  1}         };
 
     // Get actual cell and reveal
-    Cell* cell = board[x][y];
-    cell->wasClicked = true;
+    Cell* cell = GetCell(x, y);
+    RevealCell(cell);
 
     // Loop in 4 directions
     for (int i = 0; i < 4; i++){
@@ -164,7 +181,7 @@ void Grid::RevealBlankCell(int x, int y){
         if ((xCell < 0 || xCell >= width) || (yCell < 0 || yCell >= height)) continue;
 
         // Get adjacent cell pointer
-        Cell* adjCell = board[xCell][yCell];
+        Cell* adjCell = GetCell(xCell, yCell);
 
         // Check that adjcell does not have any content and has not yet been revealed 
         // to recursively traverse all other similar cells 
@@ -174,7 +191,46 @@ void Grid::RevealBlankCell(int x, int y){
     
 };
 
-Cell*   Grid::GetCell(int x, int y)     { return board[x][y];   };
-uint8_t Grid::GetWidth()                { return width;         };
-uint8_t Grid::GetHeight()               { return height;        };
-uint8_t Grid::GetMaxBombs()             { return maxBombs;      };
+void Grid::PutWarningInCell(int x, int y){
+
+    // Get Cell on coordinate and mark as a warning
+    Cell* cell = GetCell(x, y);
+    if (cell->haveWarning){
+
+        cell->haveWarning = false;
+
+        for (auto it = cellsMarkedAsWarning.begin(); it != cellsMarkedAsWarning.end(); ++it){
+
+            if (*it == cell) {
+                cellsMarkedAsWarning.erase(it);
+                break;
+            }
+
+        }
+        std::cout << cellsMarkedAsWarning.size() << std::endl;
+
+    } else {
+
+        cell->haveWarning = true;
+        cellsMarkedAsWarning.push_back(cell);
+        std::cout << cellsMarkedAsWarning.size() << std::endl;
+
+        if (cellsMarkedAsWarning.size() == maxBombs){
+
+            bombsQuantity = 0;
+            for (auto it = cellsMarkedAsWarning.begin(); it != cellsMarkedAsWarning.end(); ++it){
+                if((*it)->flag == ECellFlag::Bomb) bombsQuantity++;
+            }
+
+        }
+        
+    }
+
+};
+
+Cell*   Grid::GetCell(int x, int y)             { return board[x][y];               };
+uint8_t Grid::GetWidth()                        { return width;                     };
+uint8_t Grid::GetHeight()                       { return height;                    };
+uint8_t Grid::GetMaxBombs()                     { return maxBombs;                  };
+bool    Grid::CheckAllCellWasRevealed()         { return cellRevealed == cellTotal; };
+bool    Grid::CheckAllBombsWasMarkedAsWarning() { return bombsQuantity == maxBombs; };

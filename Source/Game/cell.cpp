@@ -15,6 +15,10 @@ Cell::Cell(){
 
 void Cell::Render(SDL_Renderer* render){
 
+    this->frame.x = (haveWarning) ? 48 : 0;
+    
+    // if (haveWarning) this->frame.x = 48;
+
     // check if the cell has been revealed
     if (wasClicked) {
         
