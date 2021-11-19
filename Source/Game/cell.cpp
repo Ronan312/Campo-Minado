@@ -19,8 +19,13 @@ void Cell::Update(){
 
 void Cell::Render(SDL_Renderer* render){
 
-    if (wasClicked) this->frame.x = 16 + (16 * (int)flag);
-    if (flag == ECellFlag::Number) this->frame.x = 48 + (16 * numBombsAdj);;
+    if (wasClicked) {
+        
+        this->frame.x = 16 + (16 * (int)flag);
+
+        if (flag == ECellFlag::Number) this->frame.x = 48 + (16 * numBombsAdj);
+        
+    }
 
     SDL_RenderCopy(render, sprite, &frame, &position);   
 

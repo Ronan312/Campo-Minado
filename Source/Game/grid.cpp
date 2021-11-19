@@ -117,3 +117,26 @@ Cell* Grid::GetRandomTile(){
     return board[x][y];
 
 };
+
+void Grid::NoneGridVisible(int x, int y){
+
+    int dir[8][2] = { {-1,  0}, {-1, -1}, { 0, -1}, 
+                      { 1, -1},           { 1,  0}, 
+                      { 1,  1}, { 0,  1}, {-1,  1}};
+
+    Cell* cell = board[x][y];
+    cell->wasClicked = true;
+
+    for (int i = 0; i < 8; i++){
+
+        int xCell = x + dir[i][0]; 
+        int yCell = y + dir[i][1];
+
+        if ((xCell < 0 || xCell >= width) || (yCell < 0 || yCell >= height)) continue;
+
+        Cell* adjCell = board[xCell][yCell];
+        if (adjCell->flag == ECellFlag::None && !adjCell->wasClicked) NoneGridVisible(xCell, yCell);
+
+    };
+    
+};

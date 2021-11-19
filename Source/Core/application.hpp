@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include "Vendors/SDL/SDL.h"
 #include "Game/grid.hpp"
-#include "Game/cell.hpp"
+#include "Inputs/mouse.hpp"
 
 class Application {
 
@@ -23,6 +23,8 @@ class Application {
         void Update();
         void Render();
 
+        void MouseClick();
+
         static void LoadAssets(SDL_Renderer* render);
         
     private:
@@ -31,7 +33,7 @@ class Application {
         SDL_Renderer*  renderer     = nullptr;
         SDL_Event*     events       = nullptr;
         Grid*          grid         = nullptr;
-        Cell*          cell = nullptr;
+        Mouse*         mouse        = nullptr;
 
 
 };

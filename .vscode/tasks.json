@@ -22,8 +22,6 @@
                 // General Configuration
                 // ---------------------
                 "/nologo", "/Gm",
-                // "/Yc'Source/stdafx.h'", "/Fp'Compiler/PCH/stdafx.pch'",
-                // "/Yu'Compiler/PCH/stdafx.pch'", "/Yu'Compiler/PCH/vendors.pch'",
                 
                 // Error Handling
                 // --------------
@@ -50,6 +48,7 @@
                 "main.cpp",
                 "Source/Core/*.cpp",
                 "Source/Game/*.cpp",
+                "Source/Inputs/*.cpp",
 
                 // Files Location Output
                 // ---------------------
@@ -84,7 +83,7 @@
             ],
         },
         {
-            "label": "Rebuild",
+            "label": "Full Development Build",
             "problemMatcher": "$msCompile",
             "presentation": { "reveal": "silent" },
             "type": "shell",
@@ -103,8 +102,6 @@
                 // General Configuration
                 // ---------------------
                 "/nologo",
-                // "/Yc'Source/stdafx.h'", "/Fp'Compiler/PCH/stdafx.pch'",
-                // "/Yu'Compiler/PCH/stdafx.pch'", "/Yu'Compiler/PCH/vendors.pch'",
                 
                 // Error Handling
                 // --------------
@@ -131,6 +128,7 @@
                 "main.cpp",
                 "Source/Core/*.cpp",
                 "Source/Game/*.cpp",
+                "Source/Inputs/*.cpp",
 
                 // Files Location Output
                 // ---------------------
@@ -144,6 +142,89 @@
                 // Linker Configurations
                 // ---------------------
                 "/MDd",
+                "/link",
+                    "/NOLOGO",
+                    "/INCREMENTAL",
+                    "/DEBUG",
+                    "/NXCOMPAT",
+                    "/ERRORREPORT:PROMPT",
+                    "/SUBSYSTEM:CONSOLE",
+                    "/MACHINE:X64",
+                    "/PDB:Compiler\\PDB\\main.pdb",
+                    "/DYNAMICBASE", "kernel32.lib", "user32.lib", "gdi32.lib", 
+                                    "winspool.lib", "comdlg32.lib", "advapi32.lib", 
+                                    "shell32.lib", "ole32.lib", "oleaut32.lib", "uuid.lib", 
+                                    "odbc32.lib", "odbccp32.lib", "delayimp.lib",
+                                    "Compiler\\LIBS\\*.lib",
+                    "/DELAYLOAD:SDL2.dll",
+                    "/DELAYLOAD:SDL2_image.dll",
+                    "/DELAYLOAD:SDL2_mixer.dll",
+                    
+            ],
+        },
+        {
+            "label": "Full Release Build",
+            "problemMatcher": "$msCompile",
+            "presentation": { "reveal": "silent" },
+            "type": "shell",
+            "command": "cl.exe",
+            "args": [
+                
+                // Code Optimization
+                // -----------------
+                "/Od",
+                
+                // Language Configuration
+                // ----------------------
+                "/std:c++17", "/sdl-", "/permissive-", "/await",
+                "/fp:precise", "/Zc:forScope", "/Zc:inline",
+
+                // General Configuration
+                // ---------------------
+                "/nologo", "/Gm",
+                // "/Yc'Source/stdafx.h'", "/Fp'Compiler/PCH/stdafx.pch'",
+                // "/Yu'Compiler/PCH/stdafx.pch'", "/Yu'Compiler/PCH/vendors.pch'",
+                
+                // Error Handling
+                // --------------
+                "/EHsc", "/diagnostics:caret", "/W3", "/WX", "/FC",
+
+                // Debugging Configuration     
+                // -----------------------            
+                "/Zi", "/RTC1", "/GS",
+
+                // Pre-Processor Defines
+                // ---------------------
+                // "/D", "_DEBUG",
+                "/D", "_CONSOLE", 
+                "/D", "_UNICODE", 
+                "/D", "UNICODE",
+                "/D", "EDITOR",
+
+                // Include Folders
+                // ---------------
+                "/I", "Source",
+
+                // Main File Program
+                // -----------------
+                "main.cpp",
+                "Source/Core/*.cpp",
+                "Source/Game/*.cpp",
+                "Source/Inputs/*.cpp",
+
+                // Files Location Output
+                // ---------------------
+                "/Fo:", "Compiler\\OBJ\\",
+                "/Fd:", "Compiler\\PDB\\main.pdb",
+
+                // File Source Output
+                // ------------------
+                "/Fe:", "Build\\main.exe",
+
+                // Linker Configurations
+                // ---------------------
+                // "/MDd",
+                "/MD",
                 "/link",
                     "/NOLOGO",
                     "/INCREMENTAL",

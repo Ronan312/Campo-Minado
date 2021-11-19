@@ -5,6 +5,7 @@
 #include "Vendors/SDL/SDL_image.h"
 #include "Vendors/SDL/SDL_mixer.h"
 #include "Core/random.hpp"
+#include "Game/cell.hpp"
 
 std::unordered_map<std::string, SDL_Texture*> Application::resources;
 
@@ -36,6 +37,9 @@ void Application::Initialize(){
     // Initialize Game Loop
     this->isRunning = true;
 
+    // Initialize Inputs
+    mouse = new Mouse();
+
     // Set Seed for Randomize tiles
     auto now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     uint_fast32_t seed = static_cast<uint_fast32_t>(now);
@@ -43,7 +47,7 @@ void Application::Initialize(){
 
     // Initialize Grid
     grid = new Grid();
-    grid->InitializeBoard(78, 43, 200);
+    grid->InitializeBoard(15, 15, 20);
 
 };
 
@@ -79,11 +83,17 @@ void Application::HandleEvents(){
         // On Close button stop application looping
         if (this->events->type == SDL_QUIT) this->isRunning = false;
 
+        mouse->HandleEvents(this->events);
+
     };
 
 };
 
-void Application::Update(){};
+void Application::Update(){
+
+    this->MouseClick();    
+
+};
 
 void Application::Render(){
 
@@ -102,5 +112,30 @@ void Application::LoadAssets(SDL_Renderer* render){
     SDL_Surface* surfBrick = IMG_Load("./Assets/bricks.png");
     SDL_Texture* textBrick = SDL_CreateTextureFromSurface(render, surfBrick);
     Application::resources["Bricks"] = textBrick;
+
+};
+
+void Application::MouseClick(){
+
+    if (mouse->pressed[0] && !mouse->locked){
+
+        int x = mouse->position.x / 16;
+        int y = mouse->position.y / 16;
+
+        if ((x < 0 || x >= grid->width) || (y < 0 || y >= grid->height)) return;
+
+        Cell* cell = grid->board[x][y];
+        if (!cell->wasClicked) cell->wasClicked = true;
+
+        if (cell->flag == ECellFlag::Bomb){
+
+            mouse->locked = true;
+            std::cout << "Game Over" << std::endl;
+
+        }
+
+        if (cell->flag == ECellFlag::None) grid->NoneGridVisible(x, y);
+
+    }
 
 };

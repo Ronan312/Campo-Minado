@@ -12,7 +12,7 @@ class Cell {
         SDL_Texture* sprite;
         
         int       numBombsAdj   = 0;
-        bool      wasClicked    = true;
+        bool      wasClicked    = false;
         ECellFlag flag;
         SDL_Rect  frame;
         SDL_Rect  position;

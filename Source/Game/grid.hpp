@@ -16,12 +16,13 @@ class Grid {
         void GenerateTiles();
         void GenerateBombs(uint8_t max_bombs);
         void CreateNumberTiles();
+        void NoneGridVisible(int x, int y);
 
         void Render(SDL_Renderer* render);
 
-    private:
         uint8_t width;
         uint8_t height;
+    private:
 
         Cell* GetRandomTile();
 
