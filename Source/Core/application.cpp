@@ -6,8 +6,11 @@
 #include "Vendors/SDL/SDL_mixer.h"
 #include "Core/random.hpp"
 #include "Game/cell.hpp"
+#include "Scenes/Game/game-scene.hpp"
 
-ResourceMap Application::resources;
+ResourceMap   Application::resources;
+Mouse*        Application::mouse = new Mouse();
+SceneManager* Application::sceneManager = new SceneManager();
 
 Application::Application(){};
 Application::~Application(){};
@@ -18,13 +21,11 @@ void Application::Initialize(){
 
     InitializeWindow();
 
-    InitializeGameBoard();
+    LoadAssets(this->renderer);
 
-    // Load Assets
-    Application::LoadAssets(this->renderer);
-
-    // Initialize Inputs
-    mouse = new Mouse();
+    sceneManager->Initialize();
+    sceneManager->ChangeScene(EScene::Game);
+    sceneManager->gameScene->InitializeBoard();
 
     // Initialize Game Loop
     this->isRunning = true;
@@ -72,16 +73,16 @@ void Application::HandleEvents(){
 
 void Application::Update(){
 
-    this->MouseClick();    
+    sceneManager->Update();
 
 };
 
 void Application::Render(){
 
     SDL_RenderClear(this->renderer);                            // Clear content in render
-    SDL_SetRenderDrawColor(this->renderer, 88, 88, 88, 255);    // Draw a new color inside render
+    // SDL_SetRenderDrawColor(this->renderer, 88, 88, 88, 255);    // Draw a new color inside render
 
-    grid->Render(this->renderer);
+    sceneManager->Render(this->renderer);
 
     SDL_RenderPresent(this->renderer);                          // Show render in screen
 
@@ -110,18 +111,6 @@ void Application::InitializeWindow(){
     this->events = new SDL_Event;
 
 };
-void Application::InitializeGameBoard(){
-
-    // Set Seed for Randomize tiles
-    auto now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-    uint_fast32_t seed = static_cast<uint_fast32_t>(now);
-    Random::Seed(seed);
-
-    // Initialize Grid
-    grid = new Grid();
-    grid->InitializeBoard(15, 15, 20);
-
-};
 
 void Application::LoadAssets(SDL_Renderer* render){
 
@@ -134,25 +123,25 @@ void Application::LoadAssets(SDL_Renderer* render){
 
 void Application::MouseClick(){
 
-    if (mouse->pressed[0] && !mouse->locked){
+    // if (mouse->pressed[0] && !mouse->locked){
 
-        int x = mouse->position.x / 16;
-        int y = mouse->position.y / 16;
+    //     int x = mouse->position.x / 16;
+    //     int y = mouse->position.y / 16;
 
-        if ((x < 0 || x >= grid->width) || (y < 0 || y >= grid->height)) return;
+    //     if ((x < 0 || x >= grid->GetWidth()) || (y < 0 || y >= grid->GetHeight())) return;
 
-        Cell* cell = grid->board[x][y];
-        if (!cell->wasClicked) cell->wasClicked = true;
+    //     Cell* cell = grid->GetCell(x, y);
+    //     if (!cell->wasClicked) cell->wasClicked = true;
 
-        if (cell->flag == ECellFlag::Bomb){
+    //     if (cell->flag == ECellFlag::Bomb){
 
-            mouse->locked = true;
-            std::cout << "Game Over" << std::endl;
+    //         mouse->locked = true;
+    //         std::cout << "Game Over" << std::endl;
 
-        }
+    //     }
 
-        if (cell->flag == ECellFlag::None) grid->RevealBlankCell(x, y);
+    //     if (cell->flag == ECellFlag::None) grid->RevealBlankCell(x, y);
 
-    }
+    // }
 
 };

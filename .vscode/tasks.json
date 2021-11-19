@@ -49,6 +49,8 @@
                 "Source/Core/*.cpp",
                 "Source/Game/*.cpp",
                 "Source/Inputs/*.cpp",
+                "Source/Scenes/*.cpp",
+                "Source/Scenes/Game/*.cpp",
 
                 // Files Location Output
                 // ---------------------

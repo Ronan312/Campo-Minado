@@ -34,3 +34,20 @@ void Mouse::HandleEvents(SDL_Event* events){
     }
 
 };
+
+bool Mouse::CheckCollision(SDL_Rect* other){
+
+    if ((position.x >= other->x && position.x <= other->x + other->w) && 
+        (position.y >= other->y && position.x <= other->y + other->h)) {
+
+        return true;
+
+    };
+
+    return false;
+
+};
+
+void Mouse::SetLocked(bool can_lock) { locked = can_lock; };
+bool Mouse::IsLocked()               { return locked;     };
+SDL_Point* Mouse::GetMousePosition() { return &position;  };

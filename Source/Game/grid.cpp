@@ -3,14 +3,19 @@
 #include "Core/application.hpp"
 #include "Core/random.hpp"
 
-void Grid::InitializeBoard(uint8_t width, uint8_t height, uint8_t max_bomb){
+Grid::Grid(uint8_t width, uint8_t height, uint8_t max_bomb){
 
     this->width = width;
     this->height = height;
+    this->maxBombs = max_bomb;
+
+};
+
+void Grid::InitializeBoard(){
 
     GenerateCells();
 
-    GenerateBombs(max_bomb);
+    GenerateBombs();
 
     CreateNumberTiles();
 
@@ -46,10 +51,10 @@ void Grid::GenerateCells(){
 
 };
 
-void Grid::GenerateBombs(uint8_t max_bombs){
+void Grid::GenerateBombs(){
 
     // Loop on maximum quantity of bombs in game board
-    for (int i = 0; i < max_bombs; i++){
+    for (int i = 0; i < maxBombs; i++){
             
         // Pointer to random tile
         Cell* cell = GetRandomCell();
@@ -168,3 +173,8 @@ void Grid::RevealBlankCell(int x, int y){
     };
     
 };
+
+Cell*   Grid::GetCell(int x, int y)     { return board[x][y];   };
+uint8_t Grid::GetWidth()                { return width;         };
+uint8_t Grid::GetHeight()               { return height;        };
+uint8_t Grid::GetMaxBombs()             { return maxBombs;      };

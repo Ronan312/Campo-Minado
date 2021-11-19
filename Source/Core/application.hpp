@@ -3,8 +3,8 @@
 #include <string>
 #include <unordered_map>
 #include "Vendors/SDL/SDL.h"
-#include "Game/grid.hpp"
 #include "Inputs/mouse.hpp"
+#include "Scenes/scene-manager.hpp"
 
 typedef std::unordered_map<std::string, SDL_Texture*> ResourceMap; 
 
@@ -12,7 +12,9 @@ class Application {
 
     public:
 
-        static ResourceMap resources;
+        static ResourceMap      resources;
+        static Mouse*           mouse;
+        static SceneManager*    sceneManager;
 
         Application();
         ~Application();
@@ -34,8 +36,7 @@ class Application {
         SDL_Window*    window       = nullptr;
         SDL_Renderer*  renderer     = nullptr;
         SDL_Event*     events       = nullptr;
-        Grid*          grid         = nullptr;
-        Mouse*         mouse        = nullptr;
+
 
         void InitializeFramework();
         void InitializeWindow();
