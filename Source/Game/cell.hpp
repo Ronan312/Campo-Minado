@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Vendors/SDL/SDL.h"
-#include "Definitions/cell.hpp"
+#include "Definitions/cell-flag.hpp"
 
 class Cell {
 
@@ -9,22 +9,13 @@ class Cell {
 
         Cell();
 
-        SDL_Texture* sprite;
-        
-        int       numBombsAdj   = 0;
-        bool      wasClicked    = false;
-        ECellFlag flag;
-        SDL_Rect  frame;
-        SDL_Rect  position;
+        int          numBombsAdj   = 0;             // Number of bombs adjacent if cell flag was a Number
+        bool         wasClicked    = false;         // Check if this cell was revealed 
+        ECellFlag    flag;                          // A Flag to hold cell content 
+        SDL_Rect     frame;                         // A Frame on image texture
+        SDL_Rect     position;                      // Object in Game World
+        SDL_Texture* sprite;                        // Cell Sprite Pointer
 
-
-        void Update();
-        void Render(SDL_Renderer* render);
-
-        void SetFlagByIntValue(int value);
-    
-    private:
-        
-
+        void Render(SDL_Renderer* render);          // Render Object in framework
 
 };

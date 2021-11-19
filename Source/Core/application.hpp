@@ -6,11 +6,13 @@
 #include "Game/grid.hpp"
 #include "Inputs/mouse.hpp"
 
+typedef std::unordered_map<std::string, SDL_Texture*> ResourceMap; 
+
 class Application {
 
     public:
 
-        static std::unordered_map<std::string, SDL_Texture*> resources;
+        static ResourceMap resources;
 
         Application();
         ~Application();
@@ -34,6 +36,10 @@ class Application {
         SDL_Event*     events       = nullptr;
         Grid*          grid         = nullptr;
         Mouse*         mouse        = nullptr;
+
+        void InitializeFramework();
+        void InitializeWindow();
+        void InitializeGameBoard();
 
 
 };

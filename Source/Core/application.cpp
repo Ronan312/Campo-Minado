@@ -7,47 +7,27 @@
 #include "Core/random.hpp"
 #include "Game/cell.hpp"
 
-std::unordered_map<std::string, SDL_Texture*> Application::resources;
+ResourceMap Application::resources;
 
 Application::Application(){};
 Application::~Application(){};
 
 void Application::Initialize(){
 
-    // Initialize SDL Modules
-    SDL_SetMainReady();
-    SDL_Init(SDL_INIT_EVERYTHING);
-    IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
-    Mix_Init(MIX_INIT_MP3);
+    InitializeFramework();
 
-    // Create a Application Window
-    this->window = SDL_CreateWindow("Manifesto - Campo Minado",                         // Game title
-                                    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,     // Centralize Window on middle screen
-                                    1280, 720, NULL);                                   // Screen Size and Extra Flags
+    InitializeWindow();
 
-    // Create a renderer surface
-    this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
-    
-    // Create a SDL Events
-    this->events = new SDL_Event;
+    InitializeGameBoard();
 
     // Load Assets
     Application::LoadAssets(this->renderer);
 
-    // Initialize Game Loop
-    this->isRunning = true;
-
     // Initialize Inputs
     mouse = new Mouse();
 
-    // Set Seed for Randomize tiles
-    auto now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-    uint_fast32_t seed = static_cast<uint_fast32_t>(now);
-    Random::Seed(seed);
-
-    // Initialize Grid
-    grid = new Grid();
-    grid->InitializeBoard(15, 15, 20);
+    // Initialize Game Loop
+    this->isRunning = true;
 
 };
 
@@ -65,11 +45,11 @@ void Application::Shutdown(){
 void Application::Run(){
 
     // Do Game Loop
-    while(this->isRunning){
+    while(isRunning){
 
-        this->HandleEvents();
-        this->Update();
-        this->Render();
+        HandleEvents();
+        Update();
+        Render();
 
     };
 
@@ -83,6 +63,7 @@ void Application::HandleEvents(){
         // On Close button stop application looping
         if (this->events->type == SDL_QUIT) this->isRunning = false;
 
+        // Call mouse events
         mouse->HandleEvents(this->events);
 
     };
@@ -103,6 +84,42 @@ void Application::Render(){
     grid->Render(this->renderer);
 
     SDL_RenderPresent(this->renderer);                          // Show render in screen
+
+};
+
+void Application::InitializeFramework(){
+
+    // Initialize SDL Modules
+    SDL_SetMainReady();
+    SDL_Init(SDL_INIT_EVERYTHING);
+    IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+    Mix_Init(MIX_INIT_MP3);
+
+};
+void Application::InitializeWindow(){
+
+    // Create a Application Window
+    this->window = SDL_CreateWindow("Manifesto - Campo Minado",                         // Game title
+                                    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,     // Centralize Window on middle screen
+                                    1280, 720, NULL);                                   // Screen Size and Extra Flags
+
+    // Create a renderer surface
+    this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+    
+    // Create a SDL Events
+    this->events = new SDL_Event;
+
+};
+void Application::InitializeGameBoard(){
+
+    // Set Seed for Randomize tiles
+    auto now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    uint_fast32_t seed = static_cast<uint_fast32_t>(now);
+    Random::Seed(seed);
+
+    // Initialize Grid
+    grid = new Grid();
+    grid->InitializeBoard(15, 15, 20);
 
 };
 
@@ -134,7 +151,7 @@ void Application::MouseClick(){
 
         }
 
-        if (cell->flag == ECellFlag::None) grid->NoneGridVisible(x, y);
+        if (cell->flag == ECellFlag::None) grid->RevealBlankCell(x, y);
 
     }
 
