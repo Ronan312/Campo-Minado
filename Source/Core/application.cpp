@@ -73,6 +73,9 @@ void Application::Run(){
 
 void Application::HandleEvents(){
 
+    
+    mouse->ResetMouseClick();
+    
     // Loop throught framework events
     while(SDL_PollEvent(this->events)){
         

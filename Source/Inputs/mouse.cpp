@@ -24,13 +24,21 @@ void Mouse::HandleEvents(SDL_Event* events){
         
         break;
 
-        case SDL_MOUSEBUTTONUP: 
+        // case SDL_MOUSEBUTTONUP: 
         
-            if (events->button.button == SDL_BUTTON_LEFT)   this->pressed[0] = false;
-            if (events->button.button == SDL_BUTTON_RIGHT)  this->pressed[1] = false;
+        //     if (events->button.button == SDL_BUTTON_LEFT)   this->pressed[0] = false;    
+        //     if (events->button.button == SDL_BUTTON_RIGHT)  this->pressed[1] = false;
         
-        break;
+        // break;
 
+    }
+
+};
+
+void Mouse::ResetMouseClick(){
+
+    for (int i = 0; i < 2; i++){
+        this->pressed[i] = false;
     }
 
 };

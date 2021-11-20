@@ -14,6 +14,7 @@ class Mouse {
         void       SetLocked(bool can_lock); 
         bool       IsLocked();
         SDL_Point* GetMousePosition();
+        void       ResetMouseClick();
 
     private:
 
