@@ -38,7 +38,7 @@ void Mouse::HandleEvents(SDL_Event* events){
 bool Mouse::CheckCollision(SDL_Rect* other){
 
     if ((position.x >= other->x && position.x <= other->x + other->w) && 
-        (position.y >= other->y && position.x <= other->y + other->h)) {
+        (position.y >= other->y && position.y <= other->y + other->h)) {
 
         return true;
 

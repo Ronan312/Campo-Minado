@@ -15,18 +15,16 @@ Cell::Cell(){
 
 void Cell::Render(SDL_Renderer* render){
 
-    this->frame.x = (haveWarning) ? 48 : 0;
-    
-    // if (haveWarning) this->frame.x = 48;
+    this->frame.x = (haveWarning && !wasClicked) ? 16 : 0;
 
     // check if the cell has been revealed
     if (wasClicked) {
         
         // Defines the corresponding brick with the cell content
-        this->frame.x = 16 + (16 * (int)flag);
+        this->frame.x = 32 + (16 * (int)flag);
 
         // If the content is a number, it defines the brick with the number of adjacent bombs
-        if (flag == ECellFlag::Number) this->frame.x = 48 + (16 * numBombsAdj);
+        if (flag == ECellFlag::Number) this->frame.x = 64 + (16 * numBombsAdj);
         
     }
 

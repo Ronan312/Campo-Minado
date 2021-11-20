@@ -47,6 +47,7 @@
                 // -----------------
                 "main.cpp",
                 "Source/Core/*.cpp",
+                "Source/Core/Interface/*.cpp",
                 "Source/Game/*.cpp",
                 "Source/Inputs/*.cpp",
                 "Source/Scenes/*.cpp",
@@ -81,6 +82,7 @@
                     "/DELAYLOAD:SDL2.dll",
                     "/DELAYLOAD:SDL2_image.dll",
                     "/DELAYLOAD:SDL2_mixer.dll",
+                    "/DELAYLOAD:SDL2_ttf.dll",
                     
             ],
         },

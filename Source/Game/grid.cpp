@@ -9,7 +9,7 @@ Grid::Grid(uint8_t width, uint8_t height, uint8_t max_bomb){
     this->height = height;
     this->maxBombs = max_bomb;
 
-    cellTotal = (width*height) - max_bomb;
+    this->cellTotal = (width*height) - max_bomb;
 
 };
 
@@ -151,11 +151,24 @@ void Grid::RevealCell(Cell* cell){
         cell->wasClicked = true;
         if (cell->flag != ECellFlag::Bomb) cellRevealed++;
 
-        std::cout << "cellRevealed: "<< cellRevealed << " from cellTotal: " << cellTotal << std::endl;
+        // std::cout << "cellRevealed: "<< cellRevealed << " from cellTotal: " << cellTotal << std::endl;
 
     }
     
 
+
+};
+
+void Grid::RevealAllCell(){
+
+    for (int i = 0; i < width; i++){
+        for (int j = 0; j < height; j++){
+
+            Cell* cell = board[i][j];
+            if (!cell->wasClicked) cell->wasClicked = true;
+
+        };
+    };
 
 };
 
@@ -207,13 +220,13 @@ void Grid::PutWarningInCell(int x, int y){
             }
 
         }
-        std::cout << cellsMarkedAsWarning.size() << std::endl;
+        // std::cout << cellsMarkedAsWarning.size() << std::endl;
 
     } else {
 
         cell->haveWarning = true;
         cellsMarkedAsWarning.push_back(cell);
-        std::cout << cellsMarkedAsWarning.size() << std::endl;
+        // std::cout << cellsMarkedAsWarning.size() << std::endl;
 
         if (cellsMarkedAsWarning.size() == maxBombs){
 

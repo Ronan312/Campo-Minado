@@ -7,7 +7,7 @@
 #include "Game/grid.hpp"
 #include "Game/cell.hpp"
 #include "Inputs/mouse.hpp"
-
+#include "Scenes/Game/game-over-scene.hpp"
 
 GameScene::GameScene(){
 
@@ -38,8 +38,10 @@ void GameScene::Update() {
 
     if (grid->CheckAllBombsWasMarkedAsWarning() || grid->CheckAllCellWasRevealed()){
         mouse->SetLocked(true);
-        std::cout << "Game Win" << std::endl;     
-        sceneManager->ChangeScene(EScene::GameOver);   
+
+        grid->RevealAllCell();
+        sceneManager->gameOverScene->grid = this->grid;
+        sceneManager->ChangeScene(EScene::GameOver);
     };
 
 };
@@ -72,8 +74,11 @@ void GameScene::MouseClick(){
 
         if (cell->flag == ECellFlag::Bomb){
 
-            mouse->SetLocked(true);
+            cell->flag = ECellFlag::BombClicked;
+            // mouse->SetLocked(true);
             std::cout << "Game Over" << std::endl;
+            grid->RevealAllCell();
+            sceneManager->gameOverScene->grid = this->grid;
             sceneManager->ChangeScene(EScene::GameOver);
 
         };

@@ -19,6 +19,7 @@ class Grid {
         void GenerateBombs();                       // Find some random tiles and set their content to be a bomb
         void CreateNumberTiles();                   // Create the numbered cells adjacent to the bombs. 
         void RevealCell(Cell* cell);                // Reveal Cell passed in function
+        void RevealAllCell();                       // Reveal All Cell in board
         void RevealBlankCell(int x, int y);         // Reveal Cell in coordinate if was blank
         void PutWarningInCell(int x, int y);        // Put a Warning Flag on cell
 

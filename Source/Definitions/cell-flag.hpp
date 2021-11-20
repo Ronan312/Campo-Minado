@@ -5,6 +5,7 @@ enum class ECellFlag : uint8_t {
 
     None,
     Bomb,
-    Number
+    BombClicked,
+    Number,
 
 };
