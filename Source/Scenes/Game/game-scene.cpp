@@ -11,10 +11,9 @@
 
 GameScene::GameScene(){
 
+    // Get static instances
     mouse        = Application::mouse;
     sceneManager = Application::sceneManager;
-
-    controller = new GameController();
 
 };
 
@@ -36,12 +35,18 @@ void GameScene::Update() {
     this->MouseClick();
     this->MousePutFlag();
 
-    if (grid->CheckAllBombsWasMarkedAsWarning() || grid->CheckAllCellWasRevealed()){
-        mouse->SetLocked(true);
+    this->CheckWinCondition();
 
-        grid->RevealAllCell();
-        sceneManager->gameOverScene->grid = this->grid;
-        sceneManager->ChangeScene(EScene::GameOver);
+};
+
+void GameScene::CheckWinCondition(){
+
+    // Check two win conditions
+    if (grid->CheckAllBombsMarkedAsWarning() || grid->CheckAllCellWasRevealed()){
+
+        
+        GoToGameOverScene();
+    
     };
 
 };
@@ -56,30 +61,35 @@ void GameScene::Render(SDL_Renderer* render) {
 
 void GameScene::MouseClick(){
 
+    // Check if mouse isnt locked and left button was pressed
     if (mouse->pressed[0] && !mouse->IsLocked()){
 
+        // Get mouse position in grid
         SDL_Point* mousePos = mouse->GetMousePosition();
         int x = mousePos->x / 16;
         int y = mousePos->y / 16;
 
+        // Check if Coordinates is in limits and ignore
         if ((x < 0 || x >= grid->GetWidth()) || (y < 0 || y >= grid->GetHeight())) return;
 
+        // Get cell
         Cell* cell = grid->GetCell(x, y);
 
+        // If have warning then cant click
         if (cell->haveWarning) return;
 
         grid->RevealCell(cell);
 
+        // if was a blank cell reveal all blanks adjacent
         if (cell->flag == ECellFlag::None) grid->RevealBlankCell(x, y);
 
+        // if was a bomb, call a game over function
         if (cell->flag == ECellFlag::Bomb){
 
+            // Set cell as red bomb to indicate what bomb was pressed
             cell->flag = ECellFlag::BombClicked;
-            // mouse->SetLocked(true);
-            std::cout << "Game Over" << std::endl;
-            grid->RevealAllCell();
-            sceneManager->gameOverScene->grid = this->grid;
-            sceneManager->ChangeScene(EScene::GameOver);
+
+            this->GoToGameOverScene();
 
         };
 
@@ -89,16 +99,29 @@ void GameScene::MouseClick(){
 };
 void GameScene::MousePutFlag(){
 
+    // Check if mouse isnt locked and right button was pressed
     if (mouse->pressed[1] && !mouse->IsLocked()){
 
+        // Get mouse position in grid
         SDL_Point* mousePos = mouse->GetMousePosition();
         int x = mousePos->x / 16;
         int y = mousePos->y / 16;
 
+        // Check if Coordinates is in limits and ignore
         if ((x < 0 || x >= grid->GetWidth()) || (y < 0 || y >= grid->GetHeight())) return;
 
-        grid->PutWarningInCell(x, y);
+        // Set a flag in cell
+        grid->SetWarningInCell(x, y);
 
     }
+
+};
+
+void GameScene::GoToGameOverScene(){
+
+    // Show Cells in all grid and go to game over screen
+    grid->RevealAllCell();
+    sceneManager->gameOverScene->grid = this->grid;
+    sceneManager->ChangeScene(EScene::GameOver);
 
 };

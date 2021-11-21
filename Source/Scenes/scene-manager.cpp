@@ -5,6 +5,7 @@
 
 void SceneManager::Initialize(){
 
+    // Initialize Scenes Pointers
     menuScene     = new MenuScene();
     gameScene     = new GameScene();
     gameOverScene = new GameOverScene();
@@ -13,6 +14,7 @@ void SceneManager::Initialize(){
 
 void SceneManager::ChangeScene(EScene scene) {
 
+    // Set Scene Active by Enum
     switch(scene) {
 
         case EScene::MainMenu: activeScene = menuScene;     break;
@@ -27,12 +29,14 @@ void SceneManager::ChangeScene(EScene scene) {
 
 void SceneManager::Update(){
 
+    // If we have a active scene call update function
     if (activeScene) activeScene->Update();
 
 };
 
 void SceneManager::Render(SDL_Renderer* render){
 
+    // If we have a active scene call render function
     if (activeScene) activeScene->Render(render);
 
 };

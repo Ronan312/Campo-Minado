@@ -2,5 +2,5 @@
 
 uint8_t GameController::width   	= 15;
 uint8_t GameController::height  	= 15;
-uint8_t GameController::maxBombs    = 5;
+uint8_t GameController::maxBombs    = 9;
 

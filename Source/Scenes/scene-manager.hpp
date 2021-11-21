@@ -12,12 +12,12 @@ class SceneManager {
 
     public:
     
-        MenuScene*      menuScene;
-        GameScene*      gameScene;
-        GameOverScene*  gameOverScene;
+        MenuScene*      menuScene;      // Scene Instances
+        GameScene*      gameScene;      // Scene Instances
+        GameOverScene*  gameOverScene;  // Scene Instances
     
         void Initialize();
-        void ChangeScene(EScene scene);
+        void ChangeScene(EScene scene); // Change Active Scene
 
         void Update();
         void Render(SDL_Renderer* render);

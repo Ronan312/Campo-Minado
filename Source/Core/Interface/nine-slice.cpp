@@ -61,6 +61,7 @@ NineSlice::NineSlice(){
 
 void NineSlice::SetPosition(int left, int top, int right, int bottom){
 
+    // Do some calculations
     int width  = right - left;
     int height = bottom - top;
     int columns = width / this->scale; 
@@ -126,10 +127,9 @@ void NineSlice::SetScale(int scale){
 };
 void NineSlice::Render(SDL_Renderer* render){
 
+    // Render 9 slices in screen
     for (int i = 0; i < 9; i++){
-
         SDL_RenderCopy(render, sprite, &frame[i], &position[i]);
-
     }
 
 };

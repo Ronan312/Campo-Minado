@@ -10,6 +10,7 @@
 
 MenuScene::MenuScene(){
 
+    // Get Static instances
     mouse = Application::mouse;
     sceneManager = Application::sceneManager;
 
@@ -17,6 +18,7 @@ MenuScene::MenuScene(){
 
 void MenuScene::Initialize(){
 
+    // Create buttons instances
     btnNewGame      =   new Button(renderer);
     btnExit         =   new Button(renderer);
     btnGameStart    =   new Button(renderer);
@@ -32,16 +34,21 @@ void MenuScene::Initialize(){
 };
 void MenuScene::Update() {
 
+    // Update Scene based on their state
+    // 0 = Main Menu
+    // 1 = Game Options
     switch(state){
 
         case 0: 
 
+            // Update start buttons
             btnNewGame->Update();
             btnExit->Update();
 
         break;
         case 1: 
 
+            // Update config buttons
             for (int i = 0; i < 3; i++){
                 btnIncrease[i]->Update();
                 btnDecrease[i]->Update();
@@ -58,29 +65,33 @@ void MenuScene::Render(SDL_Renderer* render) {
 
     SDL_SetRenderDrawColor(render, 255, 88, 88, 255);    // Draw a new color inside render
 
+    // Render Scene based on their state
+    // 0 = Main Menu
+    // 1 = Game Options
     switch(state){
 
         case 0: 
 
+            // Render start buttons
             btnNewGame->Render(render);
             btnExit->Render(render);
-            // SDL_RenderFillRect(render, &btnGameStart->collision);
 
         break;
         
         case 1: 
 
-            DinamicText(render, ("Grid Width:" + std::to_string(GameController::width)).c_str(), 192, 96);
-            DinamicText(render, ("Grid Height:" + std::to_string(GameController::height)).c_str(), 192, 224);
-            DinamicText(render, ("Grid Max Bombs:" + std::to_string(GameController::maxBombs)).c_str(), 192, 352);
+            // Render Text with variable values
+            DinamicText(render, ("Grid Width: " + std::to_string(GameController::width)).c_str(), 192, 96);
+            DinamicText(render, ("Grid Height: " + std::to_string(GameController::height)).c_str(), 192, 224);
+            DinamicText(render, ("Grid Max Bombs: " + std::to_string(GameController::maxBombs)).c_str(), 192, 352);
 
+            // Render config buttons 
             for (int i = 0; i < 3; i++){
 
                 btnIncrease[i]->Render(render);
                 btnDecrease[i]->Render(render);
                 
             }
-
             btnGameStart->Render(render);
 
         break;
@@ -191,20 +202,27 @@ void MenuScene::InitializeConfigButtons(){
 
 void MenuScene::DinamicText(SDL_Renderer* render, const char* text, int x, int y){
 
-    SDL_Surface* surf = TTF_RenderText_Solid(Application::font, text, {0, 0, 0, 255});
+    // Save text in surface and convert to texture
+    SDL_Surface* surf = TTF_RenderText_Solid(Application::font, text, {0, 0, 0, 255});      
     SDL_Texture* tex = SDL_CreateTextureFromSurface(render, surf);
 
+    // Generate Frame and Position
     SDL_Rect textFrame, textPosition;
 
+    // Set Texture Frame
     textFrame.x = textFrame.y = 0;
     SDL_QueryTexture(tex, NULL, NULL, &textFrame.w, &textFrame.h);
 
+    // Set Position in game world
     textPosition.x = x;
     textPosition.y = y;
     textPosition.w = textFrame.w * 2;
     textPosition.h = textFrame.h * 2;
 
+    // Render texture
     SDL_RenderCopy(render, tex, &textFrame, &textPosition);
+
+    // Delete Surface and Texture
     SDL_FreeSurface(surf);
     SDL_DestroyTexture(tex);
 

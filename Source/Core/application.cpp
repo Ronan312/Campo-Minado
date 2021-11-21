@@ -27,10 +27,7 @@ void Application::Initialize(){
 
     LoadAssets(this->renderer);
 
-    sceneManager->Initialize();
-    sceneManager->ChangeScene(EScene::MainMenu);
-    sceneManager->menuScene->renderer = this->renderer;
-    sceneManager->menuScene->Initialize();
+    InitializeScenes();
 
     // Initialize Game Loop
     this->isRunning = true;
@@ -57,15 +54,17 @@ void Application::Run(){
     // Do Game Loop
     while(isRunning){
 
+        // Get actual frame time
         frametime = SDL_GetTicks();
 
         HandleEvents();
         Update();
         Render();
 
+        // Calculate framerate and limit in fps
         if (SDL_GetTicks() - frametime < minFrametime){
             SDL_Delay(minFrametime - (SDL_GetTicks() - frametime));
-        }
+        };
 
     };
 
@@ -73,7 +72,7 @@ void Application::Run(){
 
 void Application::HandleEvents(){
 
-    
+    // Reset mouse clicks
     mouse->ResetMouseClick();
     
     // Loop throught framework events
@@ -91,6 +90,7 @@ void Application::HandleEvents(){
 
 void Application::Update(){
 
+    // Update active scene
     sceneManager->Update();
 
 };
@@ -98,9 +98,8 @@ void Application::Update(){
 void Application::Render(){
 
     SDL_RenderClear(this->renderer);                            // Clear content in render
-    // SDL_SetRenderDrawColor(this->renderer, 88, 88, 88, 255);    // Draw a new color inside render
 
-    sceneManager->Render(this->renderer);
+    sceneManager->Render(this->renderer);                       // Render active scene in screen
 
     SDL_RenderPresent(this->renderer);                          // Show render in screen
 
@@ -128,6 +127,17 @@ void Application::InitializeWindow(){
     
     // Create a SDL Events
     this->events = new SDL_Event;
+
+};
+void Application::InitializeScenes(){
+
+    // Initialize and Set initial scene
+    sceneManager->Initialize();
+    sceneManager->ChangeScene(EScene::MainMenu);
+
+    // Pass renderer pointer to Menu Scene
+    sceneManager->menuScene->renderer = this->renderer;
+    sceneManager->menuScene->Initialize();
 
 };
 

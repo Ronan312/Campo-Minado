@@ -42,12 +42,10 @@ class Application {
         SDL_Window*    window       = nullptr;
         SDL_Renderer*  renderer     = nullptr;
         SDL_Event*     events       = nullptr;
-        Button*        button       = nullptr;
-
-
 
         void InitializeFramework();
         void InitializeWindow();
+        void InitializeScenes();
 
 
 };

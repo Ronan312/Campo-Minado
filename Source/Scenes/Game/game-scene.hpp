@@ -13,7 +13,6 @@ class GameScene : public SceneBase {
     public:
 
         Grid* grid;
-        GameController* controller;
         Mouse* mouse;
         SceneManager* sceneManager;
 
@@ -25,5 +24,7 @@ class GameScene : public SceneBase {
     private:
         void MouseClick();
         void MousePutFlag();
-
+        void CheckWinCondition();
+        void GoToGameOverScene();
+        
 };

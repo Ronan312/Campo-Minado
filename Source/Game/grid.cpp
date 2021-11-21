@@ -13,6 +13,21 @@ Grid::Grid(uint8_t width, uint8_t height, uint8_t max_bomb){
 
 };
 
+void Grid::Render(SDL_Renderer* render){
+
+    // Loop on Game Board
+    for (int i = 0; i < width; i++){
+        for (int j = 0; j < height; j++){
+
+            // Get Cell and call your Render Function
+            Cell* cell = board[i][j];
+            cell->Render(render);
+
+        }
+    }
+
+};
+
 void Grid::InitializeBoard(){
 
     GenerateCells();
@@ -118,40 +133,13 @@ void Grid::CreateNumberTiles(){
 
 };
 
-void Grid::Render(SDL_Renderer* render){
-
-    // Loop on Game Board
-    for (int i = 0; i < width; i++){
-        for (int j = 0; j < height; j++){
-
-            // Get Cell and call your Render Function
-            Cell* cell = board[i][j];
-            cell->Render(render);
-
-        }
-    }
-
-};
-
-Cell* Grid::GetRandomCell(){
-
-    // Get a random position on grid size
-    int x = Random::UniformInteger<int>(0, width-1);
-    int y = Random::UniformInteger<int>(0, height-1);
-
-    // Return a random Cell on grid
-    return board[x][y];
-
-};
-
 void Grid::RevealCell(Cell* cell){
 
     if (!cell->wasClicked) {
-        
+
+        // Reveal cell and sum in total cells to check first win condition        
         cell->wasClicked = true;
         if (cell->flag != ECellFlag::Bomb) cellRevealed++;
-
-        // std::cout << "cellRevealed: "<< cellRevealed << " from cellTotal: " << cellTotal << std::endl;
 
     }
     
@@ -161,6 +149,7 @@ void Grid::RevealCell(Cell* cell){
 
 void Grid::RevealAllCell(){
 
+    // Loop through all cells marking them as revealed without care on game rules
     for (int i = 0; i < width; i++){
         for (int j = 0; j < height; j++){
 
@@ -204,46 +193,81 @@ void Grid::RevealBlankCell(int x, int y){
     
 };
 
-void Grid::PutWarningInCell(int x, int y){
+void Grid::SetWarningInCell(int x, int y){
 
     // Get Cell on coordinate and mark as a warning
     Cell* cell = GetCell(x, y);
-    if (cell->haveWarning){
 
-        cell->haveWarning = false;
+    // Check if cell dont have a flag warning
+    if (!cell->haveWarning){
 
-        for (auto it = cellsMarkedAsWarning.begin(); it != cellsMarkedAsWarning.end(); ++it){
-
-            if (*it == cell) {
-                cellsMarkedAsWarning.erase(it);
-                break;
-            }
-
-        }
-        // std::cout << cellsMarkedAsWarning.size() << std::endl;
+        MarkCellAsWarning(cell);
 
     } else {
 
-        cell->haveWarning = true;
-        cellsMarkedAsWarning.push_back(cell);
-        // std::cout << cellsMarkedAsWarning.size() << std::endl;
+        RemoveWarningFromCell(cell);
 
-        if (cellsMarkedAsWarning.size() == maxBombs){
+    };
 
-            bombsQuantity = 0;
-            for (auto it = cellsMarkedAsWarning.begin(); it != cellsMarkedAsWarning.end(); ++it){
-                if((*it)->flag == ECellFlag::Bomb) bombsQuantity++;
-            }
+    CountBombsWithWarningFlag();
 
+};
+
+Cell* Grid::GetRandomCell(){
+
+    // Get a random position on grid size
+    int x = Random::UniformInteger<int>(0, width-1);
+    int y = Random::UniformInteger<int>(0, height-1);
+
+    // Return a random Cell on grid
+    return board[x][y];
+
+};
+
+void Grid::MarkCellAsWarning(Cell* cell){
+
+    // Mark this cell as flag and add in array of cells with a warning
+    cell->haveWarning = true;
+    cellsMarkedAsWarning.push_back(cell);
+
+};
+void Grid::RemoveWarningFromCell(Cell* cell){
+
+    // if have a warning desmark this cell
+    cell->haveWarning = false;
+
+    // Loop through array of cells with warning and remove then from list
+    for (auto it = cellsMarkedAsWarning.begin(); it != cellsMarkedAsWarning.end(); ++it){
+
+        if (*it == cell) {
+            cellsMarkedAsWarning.erase(it);
+            break;
+        };
+
+    };
+
+};
+
+void Grid::CountBombsWithWarningFlag(){
+
+    // After that check if array of cells with warning is equals maximum bombs
+    if (cellsMarkedAsWarning.size() == maxBombs){
+
+        // Reset Bombs quantity
+        bombsQuantity = 0;
+
+        // Loop through list and check if all cells in list have a bomb in their content
+        for (auto it = cellsMarkedAsWarning.begin(); it != cellsMarkedAsWarning.end(); ++it){
+            if((*it)->flag == ECellFlag::Bomb) bombsQuantity++;
         }
-        
+
     }
 
 };
 
-Cell*   Grid::GetCell(int x, int y)             { return board[x][y];               };
-uint8_t Grid::GetWidth()                        { return width;                     };
-uint8_t Grid::GetHeight()                       { return height;                    };
-uint8_t Grid::GetMaxBombs()                     { return maxBombs;                  };
-bool    Grid::CheckAllCellWasRevealed()         { return cellRevealed == cellTotal; };
-bool    Grid::CheckAllBombsWasMarkedAsWarning() { return bombsQuantity == maxBombs; };
+Cell*   Grid::GetCell(int x, int y)          { return board[x][y];               };
+uint8_t Grid::GetWidth()                     { return width;                     };
+uint8_t Grid::GetHeight()                    { return height;                    };
+uint8_t Grid::GetMaxBombs()                  { return maxBombs;                  };
+bool    Grid::CheckAllCellWasRevealed()      { return cellRevealed == cellTotal; };
+bool    Grid::CheckAllBombsMarkedAsWarning() { return bombsQuantity == maxBombs; };
