@@ -14,6 +14,7 @@ class Application {
 
     public:
 
+        static bool             isRunning;
         static ResourceMap      resources;
         static Mouse*           mouse;
         static SceneManager*    sceneManager;
@@ -35,7 +36,6 @@ class Application {
         static void LoadAssets(SDL_Renderer* render);
         
     private:
-        bool           isRunning    = false;
         Uint32         fps          = 30;
         Uint32         minFrametime = 1000 / fps;
         Uint32         frametime    = 0;

@@ -12,6 +12,7 @@
 #include "Scenes/Game/game-over-scene.hpp"
 #include "Core/Interface/nine-slice.hpp"
 
+bool          Application::isRunning = false;
 ResourceMap   Application::resources;
 TTF_Font*     Application::font = nullptr;
 Mouse*        Application::mouse = new Mouse();
@@ -31,9 +32,8 @@ void Application::Initialize(){
     InitializeScenes();
 
     // Initialize Game Loop
-    this->isRunning = true;
+    isRunning = true;
     
-
 };
 
 void Application::Shutdown(){

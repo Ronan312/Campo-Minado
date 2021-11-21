@@ -112,7 +112,9 @@ void MenuScene::InitializeMenuButtons(){
 
     // Exit Game Button
     btnExit->SetPosition(400, 400, 880, 448);
-    btnExit->SetCallback([&](){});
+    btnExit->SetCallback([&](){
+        Application::isRunning = false;
+    });
     btnExit->SetText("Exit Game");
     btnExit->SetTextPosition(144, 8, 3);
 

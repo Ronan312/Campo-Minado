@@ -199,7 +199,6 @@
 
                 // Pre-Processor Defines
                 // ---------------------
-                // "/D", "_DEBUG",
                 "/D", "_CONSOLE", 
                 "/D", "_UNICODE", 
                 "/D", "UNICODE",
@@ -213,8 +212,11 @@
                 // -----------------
                 "main.cpp",
                 "Source/Core/*.cpp",
+                "Source/Core/Interface/*.cpp",
                 "Source/Game/*.cpp",
                 "Source/Inputs/*.cpp",
+                "Source/Scenes/*.cpp",
+                "Source/Scenes/Game/*.cpp",
 
                 // Files Location Output
                 // ---------------------
@@ -227,7 +229,6 @@
 
                 // Linker Configurations
                 // ---------------------
-                // "/MDd",
                 "/MD",
                 "/link",
                     "/NOLOGO",
@@ -246,6 +247,7 @@
                     "/DELAYLOAD:SDL2.dll",
                     "/DELAYLOAD:SDL2_image.dll",
                     "/DELAYLOAD:SDL2_mixer.dll",
+                    "/DELAYLOAD:SDL2_ttf.dll",
                     
             ],
         }
