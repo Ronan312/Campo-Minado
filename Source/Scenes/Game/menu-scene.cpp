@@ -63,7 +63,7 @@ void MenuScene::Update() {
 };
 void MenuScene::Render(SDL_Renderer* render) {
 
-    SDL_SetRenderDrawColor(render, 255, 88, 88, 255);    // Draw a new color inside render
+    SDL_SetRenderDrawColor(render, 120, 88, 88, 255);    // Draw a new color inside render
 
     // Render Scene based on their state
     // 0 = Main Menu

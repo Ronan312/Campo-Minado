@@ -9,6 +9,7 @@
 #include "Game/cell.hpp"
 #include "Scenes/Game/menu-scene.hpp"
 #include "Scenes/Game/game-scene.hpp"
+#include "Scenes/Game/game-over-scene.hpp"
 #include "Core/Interface/nine-slice.hpp"
 
 ResourceMap   Application::resources;
@@ -137,6 +138,7 @@ void Application::InitializeScenes(){
 
     // Pass renderer pointer to Menu Scene
     sceneManager->menuScene->renderer = this->renderer;
+    sceneManager->gameOverScene->renderer = this->renderer;
     sceneManager->menuScene->Initialize();
 
 };

@@ -44,7 +44,7 @@ void GameScene::CheckWinCondition(){
     // Check two win conditions
     if (grid->CheckAllBombsMarkedAsWarning() || grid->CheckAllCellWasRevealed()){
 
-        
+        GameController::winGame = true;      
         GoToGameOverScene();
     
     };
@@ -88,7 +88,7 @@ void GameScene::MouseClick(){
 
             // Set cell as red bomb to indicate what bomb was pressed
             cell->flag = ECellFlag::BombClicked;
-
+            GameController::winGame = false;
             this->GoToGameOverScene();
 
         };
@@ -122,6 +122,7 @@ void GameScene::GoToGameOverScene(){
     // Show Cells in all grid and go to game over screen
     grid->RevealAllCell();
     sceneManager->gameOverScene->grid = this->grid;
+    sceneManager->gameOverScene->Initialize();
     sceneManager->ChangeScene(EScene::GameOver);
 
 };

@@ -8,5 +8,6 @@ class GameController {
         static uint8_t width;
         static uint8_t height;
         static uint8_t maxBombs;
+        static bool winGame;
 
 };
